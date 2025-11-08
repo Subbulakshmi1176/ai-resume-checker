@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>Upload Resume (ATS Checker)</h2>
+
+    <label>Choose Role:</label>
+    <select id="role">
+      <option value="java_developer">Java Developer</option>
+      <option value="data_scientist">Data Scientist</option>
+    </select>
+
+    <br><br>
+
+    <input id="file" type="file" accept=".pdf" />
+    <button onclick="upload()">Analyze Now</button>
+
+    <pre id="output"></pre>
+
+    <script>
+      async function upload() {
+        const f = document.getElementById('file').files[0];
+        const role = document.getElementById('role').value;
+
+        const fd = new FormData();
+        fd.append("file", f);
+        fd.append("role_key", role);
+
+        const res = await fetch("http://127.0.0.1:5000/analyze_resume", {
+          method: "POST",
+          body: fd
+        });
+
+        const json = await res.json();
+        document.getElementById("output").textContent = JSON.stringify(json, null, 2);
+      }
+    </script>
+  </body>
+</html>
+
+

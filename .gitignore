@@ -1,0 +1,13 @@
+# Ignore Python virtual environment
+backend/venv/
+
+# Ignore node_modules
+frontend/node_modules/
+
+# Ignore build files
+frontend/dist/
+
+# Ignore temp files
+__pycache__/
+*.log
+

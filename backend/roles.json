@@ -1,0 +1,12 @@
+{
+  "java_developer": {
+    "title": "Java Developer",
+    "description": "Java developer role requiring Spring Boot, REST APIs, multithreading, databases, and OOP design.",
+    "skills": ["java", "spring", "spring boot", "hibernate", "rest", "rest api", "multithreading", "concurrency", "jpa", "maven", "gradle", "microservices", "oop", "design patterns", "sql", "mysql", "postgresql"]
+  },
+  "data_scientist": {
+    "title": "Data Scientist",
+    "description": "Data Science role requiring python, pandas, scikit-learn, machine learning, statistics, model evaluation, and visualization.",
+    "skills": ["python", "pandas", "numpy", "scikit-learn", "machine learning", "deep learning", "tensorflow", "pytorch", "statistics", "data visualization", "matplotlib", "seaborn", "sql"]
+  }
+}
