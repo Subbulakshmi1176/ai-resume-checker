@@ -10,14 +10,23 @@ function App() {
 
   // ✅ Load backend URL from .env file
   const API = import.meta.env.VITE_BACKEND_URL;
+  console.log("✅ Loaded Backend URL:", API);   // <--- IMPORTANT
 
-  // Load roles from backend
+  // ✅ Load roles from backend
   useEffect(() => {
+    if (!API) {
+      console.log("❌ API URL missing! Check .env file");
+      return;
+    }
+
     fetch(`${API}/roles`)
       .then((res) => res.json())
-      .then((data) => setRoles(data))
-      .catch(() => console.log("Roles API error"));
-  }, []);
+      .then((data) => {
+        console.log("✅ Roles loaded:", data);
+        setRoles(data);
+      })
+      .catch((err) => console.error("❌ Roles API error:", err));
+  }, [API]);
 
   const analyzeResume = async () => {
     if (!file || !role) {
@@ -31,31 +40,46 @@ function App() {
     formData.append("file", file);
     formData.append("role_key", role);
 
-    const res = await fetch(`${API}/analyze_resume`, {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await fetch(`${API}/analyze_resume`, {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await res.json();
-    setResult(data);
+      const data = await res.json();
+      setResult(data);
+    } catch (error) {
+      console.error("❌ Error analyzing resume:", error);
+      alert("Server error. Check backend.");
+    }
+
     setLoading(false);
   };
 
   return (
     <div className="app">
-
       <h1 className="title">AI Resume Strength Checker</h1>
 
       {/* Upload Card */}
       <div className="upload-card">
         <label className="label">Select Job Role</label>
-        <select className="dropdown" value={role} onChange={(e) => setRole(e.target.value)}>
+
+        <select
+          className="dropdown"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
           <option value="">-- Choose Role --</option>
-          {Object.entries(roles).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value.title}
-            </option>
-          ))}
+
+          {roles && Object.entries(roles).length > 0 ? (
+            Object.entries(roles).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value.title}
+              </option>
+            ))
+          ) : (
+            <option disabled>Loading roles...</option>
+          )}
         </select>
 
         <label className="label">Upload Resume (PDF only)</label>
@@ -118,4 +142,5 @@ function App() {
 }
 
 export default App;
+
 
