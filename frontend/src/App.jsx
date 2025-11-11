@@ -8,11 +8,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
+  // ✅ Load backend URL from .env file
+  const API = import.meta.env.VITE_BACKEND_URL;
+
   // Load roles from backend
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/roles")
+    fetch(`${API}/roles`)
       .then((res) => res.json())
-      .then((data) => setRoles(data));
+      .then((data) => setRoles(data))
+      .catch(() => console.log("Roles API error"));
   }, []);
 
   const analyzeResume = async () => {
@@ -27,7 +31,7 @@ function App() {
     formData.append("file", file);
     formData.append("role_key", role);
 
-    const res = await fetch("http://127.0.0.1:5000/analyze_resume", {
+    const res = await fetch(`${API}/analyze_resume`, {
       method: "POST",
       body: formData,
     });
@@ -114,3 +118,4 @@ function App() {
 }
 
 export default App;
+
